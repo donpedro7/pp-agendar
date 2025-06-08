@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamiento</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="appointments.html"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<header>
+<div class="logo-container">
+<img src="logo.png" alt="Ppagendar" class="logo">
+</div>
+    <h1>BIENVENIDO A PPAGENDAR</h1>
+      <nav>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="schedule.html">Agendamiento</a></li>
+      <li><a href="index.html">Cerrar Sesión</a></li>
+    </ul>
+     <h2>Agendamiento de Vehículos</h2>
+  </nav>
+
+</header>
+<body>
+    <h1>Tus Citas Registradas</h1>
+    <ul id="appointmentsList"></ul>
+    <script>
+
+        // appointments.js
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        db.collection("appointments").where("userId", "==", user.uid).get()
+        .then((querySnapshot) => {
+            const appointmentsList = document.getElementById('appointmentsList');
+            querySnapshot.forEach((doc) => {
+                const li = document.createElement('li');
+                li.textContent = `${doc.data().date} - ${doc.data().time}`;
+                appointmentsList.appendChild(li);
+            });
+        });
+    } else {
+        alert("Debes iniciar sesión para ver tus citas.");
+        window.location.href = "login.html"; // Redirigir a login
+    }
+});
+    </script>
+        <footer>
+    <div class="redes-sociales">
+  <p>Síguenos en nuestras redes sociales:</p>
+  <a href="https://facebook.com" target="_blank">
+    <img src="facebook.png" alt="Facebook" width="40">
+  </a>
+  <a href="https://instagram.com" target="_blank">
+    <img src="instagram.png" alt="Instagram" width="40">
+  </a>
+  <a href="https://twitter.com" target="_blank">
+    <img src="twitter.png" alt="Twitter" width="40">
+  </a>
+</div>
+    <p>© 2025 PPAGENDAR - Todos los derechos reservados</p>
+  </footer>
+
+</body>
+</html>

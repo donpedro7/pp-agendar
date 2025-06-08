@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="schedule.html"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+  
+</head>
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="Ppagendar" class="logo">
+   
+    </div>
+       <h1>BIENVENIDO A PPAGENDAR</h1>
+    <nav>
+      <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="appointments.html">Ver Citas</a></li>
+      <li><a href="index.html">Cerrar Sesión</a></li>
+      </ul>
+  <h2>Agendamiento de Vehículos</h2>
+    </nav>
+ 
+  </header>
+<body>
+
+  <main>
+    <div class="form-container">
+      <h2>Agendamiento</h2>
+
+    <form id="scheduleForm">
+    <div class="form-group">
+        <label for="name">Nombre de la Empresa:</label>
+        <input type="text" id="empresaRegistrada" name="name" placeholder="Empresa Registrada" required />
+        <div class="notification" id="name-notification"></div>
+
+    <div class="form-group">
+        <label for="number">Nit de la Empresa:</label>
+        <input type="text" id="NitEmpresa" name="name" placeholder="Nit de la Empresa" required />
+        <div class="notification" id="name-notification"></div>
+
+    <div class="form-group"></div>
+          <label for="email">Correo Electrónico:</label>
+          <input type="email" id="email" name="email" required>
+          <div class="notification" id="email-notification"></div>
+
+    <div class="form-group">
+        <label for="number">Nombre del Conductor:</label>
+        <input type="text" id="NombreConductor" name="name" placeholder="Nombre del Conductor" required />
+        <div class="notification" id="name-notification"></div>
+      
+    <div class="form-group">
+        <label for="number">Placa del Vehículo:</label>
+        <input type="text" id="PlacaVehiculo" name="name" placeholder="Placa del Vehículo" required />
+        <div class="notification" id="name-notification"></div>
+
+    <div class="form-group">
+        <label for="number">Bultos:</label>
+        <input type="number" id="Bultos" name="name" placeholder="Cantidad de Bultos" required />
+        <div class="notification" id="name-notification"></div>  
+      
+    <div class="form-group"></div>
+        <label for="number">Fecha del Agendamiento:</label>
+        <input type="date" id="FechaAgendamiento" name="name" placeholder="Fecha del Agendamiento" required />
+        <div class="notification" id="name-notification"></div>   
+        
+    <div class="form-group"></div>
+        <label for="number">Hora del Agendamiento:</label>
+        <input type="time" id="HoraInicio" name="name" placeholder="Hora Inicio del Agendamiento" required />Hora Inicio
+        <input type="time" id="HoraFin" name="name" placeholder="Hora Fin del Agendamiento" required />Hora Fin
+        <div class="notification" id="name-notification"></div>  
+
+    <div class="form-group"></div>
+        <label for="number">Adjuntar Factura:</label>
+        <input type="file" id="factura" name="name" placeholder="Fecha del Agendamiento" accept="application/pdf" required />
+        <div class="notification" id="name-notification"></div>    
+
+
+        <button type="submit" class="btn">Agendar Cita</button>
+
+      </form>
+    </div>
+  </main>
+   
+    <script>
+
+        // schedule.js
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+document.getElementById('scheduleForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+
+    if (user) {
+        db.collection("appointments").add({
+            userId: user.uid,
+            date: date,
+            time: time
+        })
+        .then(() => {
+            alert("Cita agendada exitosamente");
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+    } else {
+        alert("Debes iniciar sesión para agendar una cita.");
+    }
+});
+
+    </script>
+        <footer>
+    <div class="redes-sociales">
+  <p>Síguenos en nuestras redes sociales:</p>
+  <a href="https://facebook.com" target="_blank">
+    <img src="facebook.png" alt="Facebook" width="40">
+  </a>
+  <a href="https://instagram.com" target="_blank">
+    <img src="instagram.png" alt="Instagram" width="40">
+  </a>
+  <a href="https://twitter.com" target="_blank">
+    <img src="twitter.png" alt="Twitter" width="40">
+  </a>
+</div>
+    <p>© 2025 PPAGENDAR - Todos los derechos reservados</p>
+  </footer>
+</body>
+</html>
